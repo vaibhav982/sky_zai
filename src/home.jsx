@@ -1,24 +1,107 @@
 import React, { useState, useEffect, useRef } from "react";
 
 const COLORS = [
+  // Light Blues
+  "#80D8FF",
+  "#40C4FF",
+  "#00B0FF",
+  "#0091EA",
+  
+  // Reds
+  "#FF8A80",
+  "#FF5252",
   "#FF1744",
-  "#F50057",
-  "#D500F9",
+  "#D50000",
+  
+  // Deep Purples
+  "#B388FF",
+  "#7C4DFF",
   "#651FFF",
   "#6200EA",
-  "#304FFE",
-  "#2979FF",
-  "#00B0FF",
-  "#00E5FF",
-  "#1DE9B6",
+  
+  // Light Greens
+  "#B9F6CA",
+  "#69F0AE",
   "#00E676",
-  "#76FF03",
-  "#C6FF00",
+  "#00C853",
+  
+  // Yellows
+  "#FFFF8D",
+  "#FFFF00",
   "#FFEA00",
-  "#FFC400",
-  "#FF9100",
+  "#FFD600",
+  
+  // Deep Oranges
+  "#FF9E80",
+  "#FF6E40",
   "#FF3D00",
-  "#FF1744",
+  "#DD2C00",
+  
+  // Pinks
+  "#FF80AB",
+  "#FF4081",
+  "#F50057",
+  "#C51162",
+  
+  // Indigos
+  "#8C9EFF",
+  "#536DFE",
+  "#3D5AFE",
+  "#304FFE",
+  
+  // Cyans
+  "#84FFFF",
+  "#18FFFF",
+  "#00E5FF",
+  "#00B8D4",
+  
+  // Lime
+  "#CCFF90",
+  "#B2FF59",
+  "#76FF03",
+  "#64DD17",
+  
+  // Amber
+  "#FFE57F",
+  "#FFD740",
+  "#FFC400",
+  "#FFAB00",
+  
+  // Purple
+  "#EA80FC",
+  "#E040FB",
+  "#D500F9",
+  "#AA00FF",
+  
+  // Blue
+  "#82B1FF",
+  "#448AFF",
+  "#2979FF",
+  "#2962FF",
+  
+  // Teal
+  "#A7FFEB",
+  "#64FFDA",
+  "#1DE9B6",
+  "#00BFA5",
+  
+  // Lime Yellow
+  "#F4FF81",
+  "#EEFF41",
+  "#C6FF00",
+  "#AEEA00",
+  
+  // Orange
+  "#FFD180",
+  "#FFAB40",
+  "#FF9100",
+  "#FF6D00",
+  
+  // Grey
+  "#757575",
+  "#616161",
+  "#424242",
+  "#212121"
 ];
 
 const createParticle = (width, height, isLarge = false) => {
@@ -241,7 +324,7 @@ const SkyZaiLogo = () => {
           className="transition-all duration-300 ease-in-out"
           preserveAspectRatio="xMidYMid meet"
         >
-          <g className="fill-white hover:fill-white transition-colors">
+          <g className="fill-white hover:fill-white transition-colors" style={{ opacity: 0.7 }}>
             <path d="M336.339 83.2135L432.354 138.648C432.37 95.648 432.38 70.7173 432.39 27.7173L336.339 83.2135ZM336.339 83.2135L432.354 138.648L336.303 194.144L336.339 83.2135Z" />
             <path d="M480.433 221.923L480.433 332.792C512.433 315.075 544.52 295.358 576.52 277.358L480.433 221.923ZM480.433 221.923L480.433 332.792L384.346 277.358L480.433 221.923Z" />
             <path d="M432.354 416.067L336.339 471.502C368.365 489.25 400.39 509.998 432.39 526.998L432.354 416.067ZM432.354 416.067L336.339 471.502L336.303 360.571L432.354 416.067Z" />
