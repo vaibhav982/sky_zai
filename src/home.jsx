@@ -289,6 +289,7 @@ const AnimatedBackground = () => {
 const SkyZaiLogo = () => {
   const containerRef = useRef(null);
   const [size, setSize] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
   const goldenRatio = 1.618;
 
   useEffect(() => {
@@ -314,9 +315,21 @@ const SkyZaiLogo = () => {
       ref={containerRef}
     >
       <AnimatedBackground />
-      <div className="absolute inset-0 backdrop-blur-3xl" />
+      <div 
+        className="absolute inset-0 backdrop-blur-3xl transition-all duration-1000"
+        style={{ 
+          backdropFilter: `blur(${isHovered ? '55px' : '45px'})` 
+        }} 
+      />
 
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+      <div 
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-transform duration-1000"
+        style={{ 
+          transform: `translate(-50%, -50%) scale(${isHovered ? 1.05 : 1})`,
+        }}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
         <svg
           width={size}
           height={size * 0.962}
@@ -324,7 +337,21 @@ const SkyZaiLogo = () => {
           className="transition-all duration-300 ease-in-out"
           preserveAspectRatio="xMidYMid meet"
         >
-          <g className="fill-white hover:fill-white transition-colors" style={{ opacity: 0.7 }}>
+          <defs>
+            <filter id="hover-glow">
+              <feGaussianBlur stdDeviation="4" />
+              <feComposite in2="SourceGraphic" operator="over" />
+              <feDropShadow dx="0" dy="0" stdDeviation="8" floodColor="white" floodOpacity="0.3" />
+            </filter>
+          </defs>
+          
+          <g 
+            className="fill-white transition-all duration-700"
+            style={{ 
+              filter: isHovered ? 'url(#hover-glow)' : 'none',
+              opacity: isHovered ? 1 : 0.7,
+            }}
+          >
             <path d="M336.339 83.2135L432.354 138.648C432.37 95.648 432.38 70.7173 432.39 27.7173L336.339 83.2135ZM336.339 83.2135L432.354 138.648L336.303 194.144L336.339 83.2135Z" />
             <path d="M480.433 221.923L480.433 332.792C512.433 315.075 544.52 295.358 576.52 277.358L480.433 221.923ZM480.433 221.923L480.433 332.792L384.346 277.358L480.433 221.923Z" />
             <path d="M432.354 416.067L336.339 471.502C368.365 489.25 400.39 509.998 432.39 526.998L432.354 416.067ZM432.354 416.067L336.339 471.502L336.303 360.571L432.354 416.067Z" />
