@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { FiArrowRight, FiUsers, FiZap, FiGlobe, FiLayers } from "react-icons/fi";
 
 import Section from "../components/ui/Section";
@@ -33,7 +33,18 @@ const features = [
 ];
 
 const Home = () => {
-    const [isHeroTextVisible, setIsHeroTextVisible] = React.useState(false);// Empty dependency array ensures this runs only on mount
+    const [isHeroTextVisible, setIsHeroTextVisible] = React.useState(false);
+    const heroRef = React.useRef(null);
+
+    // Add scroll progress animation
+    const { scrollYProgress } = useScroll({
+        target: heroRef,
+        offset: ["start start", "end start"]
+    });
+
+    const heroOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+    const heroScale = useTransform(scrollYProgress, [0, 0.7], [1, 0.95]);
+    const heroY = useTransform(scrollYProgress, [0, 0.7], [0, -50]);
 
     return (
         <>
@@ -45,19 +56,37 @@ const Home = () => {
                 pb="0"
                 overflow="hidden"
                 withContainer={false}
+                ref={heroRef}
             >
-                <div className="absolute inset-0 z-0">
+                {/* Enhanced background with gradient overlay */}
+                <div className="absolute inset-0 z-0 bg-dark-900/50">
+                    <div className="absolute inset-0 bg-gradient-to-b from-dark-900/80 via-dark-900/70 to-dark-900/90 z-10"></div>
+                    <div className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-dark-900 to-transparent z-20"></div>
+                    <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-dark-900 to-transparent z-20"></div>
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,_var(--tw-gradient-stops))] from-primary-500/10 via-transparent to-transparent z-10"></div>
                     <SkyZaiLogo blurCentralLogo={isHeroTextVisible} />
                 </div>
 
-                <div className="relative z-10 flex flex-col justify-center items-center h-screen container-padding mx-auto text-center">
+                {/* Decorative accents */}
+                <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary-500/5 rounded-full blur-3xl z-0 animate-pulse-slow"></div>
+                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary-500/5 rounded-full blur-3xl z-0 animate-pulse-slow" style={{ animationDelay: '2s' }}></div>
+
+                {/* Hero content */}
+                <motion.div
+                    className="relative z-10 flex flex-col justify-center items-center min-h-screen container-padding mx-auto text-center"
+                    style={{
+                        opacity: heroOpacity,
+                        scale: heroScale,
+                        y: heroY
+                    }}
+                >
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.3 }}
                         className="mb-4"
                     >
-                        <span className="px-4 py-1.5 rounded-full bg-primary-500/10 text-light-300 text-sm font-medium backdrop-blur-sm border border-primary-500/20">
+                        <span className="px-6 py-2 rounded-full bg-primary-500/10 text-light-300 text-sm font-medium backdrop-blur-sm border border-primary-500/20 inline-block">
                             Building the Noosphere
                         </span>
                     </motion.div>
@@ -65,7 +94,7 @@ const Home = () => {
                     <AnimatedText
                         text="Cultivating a Decentralized Global Intelligence"
                         element="h1"
-                        className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white max-w-4xl mb-6"
+                        className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white max-w-5xl mb-8 leading-tight"
                         highlight
                         animated
                         delay={0.5}
@@ -76,7 +105,7 @@ const Home = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.8 }}
-                        className="text-light-200 text-base sm:text-lg md:text-xl max-w-2xl mb-10"
+                        className="text-light-200 text-lg sm:text-xl md:text-2xl max-w-3xl mb-12 font-light leading-relaxed"
                     >
                         Empowering a global network to build an accessible AI Noosphere grounded in energy and focused on solving complex challenges.
                     </motion.p>
@@ -85,47 +114,58 @@ const Home = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 1 }}
-                        className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4"
+                        className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6"
                     >
-                        <Button to="/vision" size="lg" icon={<FiArrowRight />}>
+                        <Button to="/vision" size="xl" icon={<FiArrowRight />} className="shadow-lg shadow-primary-500/10">
                             Explore Our Vision
                         </Button>
-                        <Button to="/join" variant="glass" size="lg">
+                        <Button to="/join" variant="glass" size="xl" className="backdrop-blur-md border border-white/10">
                             Join the Movement
                         </Button>
                     </motion.div>
-                </div>
+                </motion.div>
 
+                {/* Improved scroll indicator */}
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 1, delay: 1.5 }}
-                    className="absolute bottom-8 left-0 right-0 flex justify-center"
+                    className="absolute bottom-12 left-0 right-0 flex justify-center z-20"
                 >
                     <motion.div
-                        animate={{ y: [0, 10, 0] }}
-                        transition={{ repeat: Infinity, duration: 2 }}
+                        animate={{ y: [0, 12, 0] }}
+                        transition={{
+                            repeat: Infinity,
+                            duration: 2.5,
+                            ease: "easeInOut"
+                        }}
+                        className="flex flex-col items-center cursor-pointer"
                     >
                         <a
                             href="#mission"
-                            className="flex flex-col items-center text-light-400 hover:text-primary-400 transition-colors"
+                            className="flex flex-col items-center group"
                         >
-                            <span className="text-sm mb-2">Scroll to discover</span>
-                            <svg
-                                width="20"
-                                height="10"
-                                viewBox="0 0 20 10"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <path
-                                    d="M1 1L10 9L19 1"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                />
-                            </svg>
+                            <span className="text-light-400 group-hover:text-primary-300 transition-all duration-300 text-sm mb-3">
+                                Scroll to discover
+                            </span>
+                            <div className="w-9 h-9 flex items-center justify-center rounded-full border border-light-400/20 group-hover:border-primary-300/40 group-hover:scale-110 transition-all duration-300">
+                                <svg
+                                    width="14"
+                                    height="8"
+                                    viewBox="0 0 14 8"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="text-light-400 group-hover:text-primary-300 transition-all duration-300"
+                                >
+                                    <path
+                                        d="M1 1L7 7L13 1"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    />
+                                </svg>
+                            </div>
                         </a>
                     </motion.div>
                 </motion.div>
