@@ -76,7 +76,11 @@ const AnimatedText = ({
                                 key={charIndex}
                                 variants={child}
                                 className={`inline-block ${highlight ? "heading-gradient" : ""}`}
-                                style={{ display: "inline-block" }}
+                                style={{
+                                    display: "inline-block",
+                                    paddingBottom: "0.1em",
+                                    lineHeight: "1.2"
+                                }}
                             >
                                 {char}
                             </motion.span>
