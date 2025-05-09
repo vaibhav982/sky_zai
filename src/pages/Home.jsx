@@ -35,6 +35,7 @@ const features = [
 const Home = () => {
     const [isHeroTextVisible, setIsHeroTextVisible] = React.useState(false);
     const heroRef = React.useRef(null);
+    const introSectionRef = React.useRef(null);
 
     // Add scroll progress animation
     const { scrollYProgress } = useScroll({
@@ -44,11 +45,10 @@ const Home = () => {
 
     const heroOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
     const heroScale = useTransform(scrollYProgress, [0, 0.7], [1, 0.95]);
-    const heroY = useTransform(scrollYProgress, [0, 0.7], [0, -50]);
 
     return (
         <>
-            {/* Hero Section */}
+            {/* Clean Hero Section - Only Logo and Background */}
             <Section
                 className="relative"
                 fullHeight
@@ -58,72 +58,16 @@ const Home = () => {
                 withContainer={false}
                 ref={heroRef}
             >
-                {/* Enhanced background with gradient overlay */}
-                <div className="absolute inset-0 z-0 bg-dark-900/50">
-                    <div className="absolute inset-0 bg-gradient-to-b from-dark-900/80 via-dark-900/70 to-dark-900/90 z-10"></div>
-                    <div className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-dark-900 to-transparent z-20"></div>
-                    <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-dark-900 to-transparent z-20"></div>
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,_var(--tw-gradient-stops))] from-primary-500/10 via-transparent to-transparent z-10"></div>
-                    <SkyZaiLogo blurCentralLogo={isHeroTextVisible} />
+                {/* Background with no dark overlay */}
+                <div className="absolute inset-0 z-0">
+                    {/* Removed dark overlay gradients */}
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary-500/10 via-transparent to-transparent z-10"></div>
+                    <SkyZaiLogo blurCentralLogo={false} />
                 </div>
 
-                {/* Decorative accents */}
-                <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary-500/5 rounded-full blur-3xl z-0 animate-pulse-slow"></div>
-                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary-500/5 rounded-full blur-3xl z-0 animate-pulse-slow" style={{ animationDelay: '2s' }}></div>
-
-                {/* Hero content */}
-                <motion.div
-                    className="relative z-10 flex flex-col justify-center items-center min-h-screen container-padding mx-auto text-center"
-                    style={{
-                        opacity: heroOpacity,
-                        scale: heroScale,
-                        y: heroY
-                    }}
-                >
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: 0.3 }}
-                        className="mb-4"
-                    >
-                        <span className="px-6 py-2 rounded-full bg-primary-500/10 text-light-300 text-sm font-medium backdrop-blur-sm border border-primary-500/20 inline-block">
-                            Building the Noosphere
-                        </span>
-                    </motion.div>
-
-                    <AnimatedText
-                        text="Cultivating a Decentralized Global Intelligence"
-                        element="h1"
-                        className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white max-w-5xl mb-8 leading-tight"
-                        highlight
-                        animated
-                        delay={0.5}
-                        onViewportEnter={() => setIsHeroTextVisible(true)}
-                    />
-
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: 0.8 }}
-                        className="text-light-200 text-lg sm:text-xl md:text-2xl max-w-3xl mb-12 font-light leading-relaxed"
-                    >
-                        Empowering a global network to build an accessible AI Noosphere grounded in energy and focused on solving complex challenges.
-                    </motion.p>
-
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: 1 }}
-                        className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6"
-                    >
-                        <Button to="/vision" size="xl" icon={<FiArrowRight />} className="shadow-lg shadow-primary-500/10">
-                            Explore Our Vision
-                        </Button>
-                        <Button to="/join" variant="glass" size="xl" className="backdrop-blur-md border border-white/10">
-                            Join the Movement
-                        </Button>
-                    </motion.div>
-                </motion.div>
+                {/* Decorative accents - kept but made less intrusive */}
+                <div className="absolute top-1/3 left-1/3 w-64 h-64 bg-primary-500/5 rounded-full blur-3xl z-0 animate-pulse-slow"></div>
+                <div className="absolute bottom-1/3 right-1/3 w-96 h-96 bg-secondary-500/5 rounded-full blur-3xl z-0 animate-pulse-slow" style={{ animationDelay: '2s' }}></div>
 
                 {/* Improved scroll indicator */}
                 <motion.div
@@ -142,7 +86,7 @@ const Home = () => {
                         className="flex flex-col items-center cursor-pointer"
                     >
                         <a
-                            href="#mission"
+                            href="#intro"
                             className="flex flex-col items-center group"
                         >
                             <span className="text-light-400 group-hover:text-primary-300 transition-all duration-300 text-sm mb-3">
@@ -169,6 +113,67 @@ const Home = () => {
                         </a>
                     </motion.div>
                 </motion.div>
+            </Section>
+
+            {/* New Introduction Section - Contains Former Hero Text Content */}
+            <Section
+                id="intro"
+                className="bg-gradient-to-b from-dark-900 to-dark-800 relative overflow-hidden py-28"
+                ref={introSectionRef}
+            >
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,_var(--tw-gradient-stops))] from-primary-500/5 via-transparent to-transparent pointer-events-none"></div>
+                <div className="absolute top-1/4 right-1/4 w-72 h-72 bg-primary-500/5 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div className="container-padding mx-auto">
+                    <div className="max-w-5xl mx-auto text-center">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.2 }}
+                            viewport={{ once: true, margin: "-100px" }}
+                            className="mb-4"
+                        >
+                            <span className="px-6 py-2 rounded-full bg-primary-500/10 text-light-300 text-sm font-medium backdrop-blur-sm border border-primary-500/20 inline-block">
+                                Building the Noosphere
+                            </span>
+                        </motion.div>
+
+                        <AnimatedText
+                            text="Cultivating a Decentralized Global Intelligence"
+                            element="h1"
+                            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white max-w-5xl mb-8 leading-tight"
+                            highlight
+                            animated
+                            delay={0.3}
+                            onViewportEnter={() => setIsHeroTextVisible(true)}
+                        />
+
+                        <motion.p
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.5 }}
+                            viewport={{ once: true, margin: "-100px" }}
+                            className="text-light-200 text-lg sm:text-xl md:text-2xl max-w-3xl mx-auto mb-12 font-light leading-relaxed"
+                        >
+                            Empowering a global network to build an accessible AI Noosphere grounded in energy and focused on solving complex challenges.
+                        </motion.p>
+
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.7 }}
+                            viewport={{ once: true, margin: "-100px" }}
+                            className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 justify-center"
+                        >
+                            <Button to="/vision" size="xl" icon={<FiArrowRight />} className="shadow-lg shadow-primary-500/10">
+                                Explore Our Vision
+                            </Button>
+                            <Button to="/join" variant="glass" size="xl" className="backdrop-blur-md border border-white/10">
+                                Join the Movement
+                            </Button>
+                        </motion.div>
+                    </div>
+                </div>
             </Section>
 
             {/* Mission Section */}
