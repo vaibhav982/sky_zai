@@ -6,97 +6,97 @@ const COLORS = [
   "#40C4FF",
   "#00B0FF",
   "#0091EA",
-  
+
   // Reds
   "#FF8A80",
   "#FF5252",
   "#FF1744",
   "#D50000",
-  
+
   // Deep Purples
   "#B388FF",
   "#7C4DFF",
   "#651FFF",
   "#6200EA",
-  
+
   // Light Greens
   "#B9F6CA",
   "#69F0AE",
   "#00E676",
   "#00C853",
-  
+
   // Yellows
   "#FFFF8D",
   "#FFFF00",
   "#FFEA00",
   "#FFD600",
-  
+
   // Deep Oranges
   "#FF9E80",
   "#FF6E40",
   "#FF3D00",
   "#DD2C00",
-  
+
   // Pinks
   "#FF80AB",
   "#FF4081",
   "#F50057",
   "#C51162",
-  
+
   // Indigos
   "#8C9EFF",
   "#536DFE",
   "#3D5AFE",
   "#304FFE",
-  
+
   // Cyans
   "#84FFFF",
   "#18FFFF",
   "#00E5FF",
   "#00B8D4",
-  
+
   // Lime
   "#CCFF90",
   "#B2FF59",
   "#76FF03",
   "#64DD17",
-  
+
   // Amber
   "#FFE57F",
   "#FFD740",
   "#FFC400",
   "#FFAB00",
-  
+
   // Purple
   "#EA80FC",
   "#E040FB",
   "#D500F9",
   "#AA00FF",
-  
+
   // Blue
   "#82B1FF",
   "#448AFF",
   "#2979FF",
   "#2962FF",
-  
+
   // Teal
   "#A7FFEB",
   "#64FFDA",
   "#1DE9B6",
   "#00BFA5",
-  
+
   // Lime Yellow
   "#F4FF81",
   "#EEFF41",
   "#C6FF00",
   "#AEEA00",
-  
+
   // Orange
   "#FFD180",
   "#FFAB40",
   "#FF9100",
   "#FF6D00",
-  
+
   // Grey
   "#757575",
   "#616161",
@@ -152,10 +152,10 @@ const AnimatedBackground = () => {
 
   useEffect(() => {
     const generateParticles = () => {
-      const largeParticles = Array(15)
+      const largeParticles = Array(5)
         .fill(null)
         .map(() => createParticle(dimensions.width, dimensions.height, true));
-      const smallParticles = Array(25)
+      const smallParticles = Array(10)
         .fill(null)
         .map(() => createParticle(dimensions.width, dimensions.height, false));
       particlesRef.current = { large: largeParticles, small: smallParticles };
@@ -167,11 +167,8 @@ const AnimatedBackground = () => {
   }, [dimensions]);
 
   useEffect(() => {
-    const drawParticle = (ctx, particle, blur = false) => {
+    const drawParticle = (ctx, particle) => {
       ctx.save();
-      if (blur) {
-        ctx.filter = "blur(8px)";
-      }
 
       const currentColor = lerpColor(
         particle.color,
@@ -215,7 +212,7 @@ const AnimatedBackground = () => {
       ctx.clearRect(0, 0, dimensions.width, dimensions.height);
 
       particlesRef.current.large.forEach((particle) => {
-        drawParticle(ctx, particle, true);
+        drawParticle(ctx, particle);
       });
 
       particlesRef.current.small.forEach((particle) => {
@@ -253,7 +250,10 @@ const AnimatedBackground = () => {
     };
 
     if (dimensions.width && dimensions.height) {
-      requestRef.current = requestAnimationFrame(animate);
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!prefersReducedMotion) {
+        requestRef.current = requestAnimationFrame(animate);
+      }
     }
 
     return () => {
@@ -286,7 +286,7 @@ const AnimatedBackground = () => {
   );
 };
 
-const SkyZaiLogo = () => {
+const SkyZaiLogo = ({ blurCentralLogo = false }) => {
   const containerRef = useRef(null);
   const [size, setSize] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
@@ -315,17 +315,18 @@ const SkyZaiLogo = () => {
       ref={containerRef}
     >
       <AnimatedBackground />
-      <div 
+      <div
         className="absolute inset-0 backdrop-blur-3xl transition-all duration-1000"
-        style={{ 
-          backdropFilter: `blur(${isHovered ? '55px' : '45px'})` 
-        }} 
+        style={{
+          backdropFilter: `blur(${isHovered ? '35px' : '30px'})`
+        }}
       />
 
-      <div 
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-transform duration-1000"
-        style={{ 
+      <div
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-transform duration-1000 transition-filter ease-in-out"
+        style={{
           transform: `translate(-50%, -50%) scale(${isHovered ? 1.05 : 1})`,
+          filter: blurCentralLogo ? 'blur(4px)' : 'none',
         }}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
@@ -344,10 +345,10 @@ const SkyZaiLogo = () => {
               <feDropShadow dx="0" dy="0" stdDeviation="8" floodColor="white" floodOpacity="0.3" />
             </filter>
           </defs>
-          
-          <g 
+
+          <g
             className="fill-white transition-all duration-700"
-            style={{ 
+            style={{
               filter: isHovered ? 'url(#hover-glow)' : 'none',
               opacity: isHovered ? 1 : 0.7,
             }}
