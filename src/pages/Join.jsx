@@ -268,7 +268,7 @@ const Join = () => {
         setIsSubmitting(true);
 
         // Send form data to Formspree
-        fetch("https://formspree.io/f/xjkwogqo", {
+        fetch("https://formspree.io/f/mbloedwn", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
